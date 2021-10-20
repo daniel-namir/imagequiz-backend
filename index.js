@@ -20,7 +20,7 @@ application.get('/customers', (request, response) => {
 
 application.post('/register', (request, response) => {
     let name = request.body.name;
-    let email = request.params.email;
+    let email = request.body.email;
     let password = request.body.password;
     let alreadyExist = api.addCustomer(name, email, password);
     if (alreadyExist) {
