@@ -1,0 +1,19 @@
+{
+  "name": "imagequiz-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daniel-namir/imagequiz-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daniel-namir/imagequiz-backend/issues"
+  },
+  "homepage": "https://github.com/daniel-namir/imagequiz-backend#readme"
+}
