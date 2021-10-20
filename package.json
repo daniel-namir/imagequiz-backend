@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/daniel-namir/imagequiz-backend/issues"
   },
-  "homepage": "https://github.com/daniel-namir/imagequiz-backend#readme"
+  "homepage": "https://github.com/daniel-namir/imagequiz-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
