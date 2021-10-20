@@ -25,4 +25,5 @@ let addCustomer = (name, email, password) => {
 exports.add = add;
 exports.customers = customers;
 exports.getCustomers = getCustomers;
+exports.addCustomer = addCustomer;
 exports.getFlowers = getFlowers;
