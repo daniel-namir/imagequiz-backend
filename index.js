@@ -39,10 +39,10 @@ application.post('/login', (request, response) => {
     let password = request.body.password;
     let exists = api.addCustomer(name, email, password);
     if (exists) {
-        response.json({"isvalid": true, "message": "customer already exists"});
+        response.json({"isvalid": true, message: "customer already exists"});
     }
     else {
-        response.json({"isvalid": false, "message": "customer does not exist"});
+        response.json({"isvalid": false, message: "customer does not exist"});
     }
 });
 
@@ -63,7 +63,8 @@ application.post('/score', (request, response) => {
     let quizTaker = request.body.quizTaker;
     let quizId = request.body.quizId;
     let score = request.body.score;
-    response.json((api.addScore(quizTaker, quizId, score)), {message: "Score has been updated."});
+    api.addScore(quizTaker,quizId,score);
+    response.send(JSON. stringify({message: "Score has been updated."}));
 });
 
 application.get('/scores/:quiztaker/:quizid', (request, response) => {
