@@ -30,7 +30,7 @@ let getQuizzes = () => {
 let getQuiz = (id) => {
     for (let i = 0; i < quizzes.length; i++) {
         for (let j = 0; j < quizzes[i].length; j++) {
-            if (quizzes[i][j] == id) {
+            if (quizzes[i][j].name == id) {
                 return quizzes[i][j];
             }
         }
@@ -53,6 +53,7 @@ let addScore = (quizTaker, quizId, score) => {
 let checkScore = (quizTaker, quizId) => {
     for (let i = 0; i < scores.length; i++) {
         if (scores[i].quizTaker == quizTaker && scores[i].quizId == quizId) {
+            console.log(scores[i].score);
             return scores[i].score;
         }
     }
