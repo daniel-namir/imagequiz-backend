@@ -4,7 +4,7 @@ const api = require('./api');
 
 
 const application = express();
-const port = process.env.PORT || 4003;
+const port = process.env.PORT || 4002;
 
 application.use(express.json());
 application.use(cors());
@@ -24,9 +24,9 @@ application.post('/register', (request, response) => {
     let name = request.body.name;
     let email = request.body.email;
     let password = request.body.password;
-    let alreadyExist = api.addCustomer(name, email, password);
-    if (alreadyExist) {
-        response.status(403).json({message: 'A customer with the same email already exists.'});
+    let exists = api.addCustomer(name, email, password);
+    if (exists) {
+        response.status(403).json({message: "A customer with the same email already exists."});
     }
     else {
         response.json({message: 'The customer added.'});

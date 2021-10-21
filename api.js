@@ -1,5 +1,5 @@
 const { flowers } = require('./flowers.js');
-var { customers } = require('./users.js');
+var { customers } = require('./customers.js');
 
 let add = (n, m) => {
     return n + m;
@@ -10,7 +10,11 @@ let getCustomers = (customers) => {
 }
 
 let getFlowers = () => {
-    return flowers;
+    let flowersList = [];
+    for (let i = 0; i < flowers.length; i++) {
+        flowersList.push(flowers[i]);
+    }
+    return flowersList;
 }
 
 let addCustomer = (name, email, password) => {
