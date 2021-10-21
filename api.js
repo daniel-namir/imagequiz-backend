@@ -19,7 +19,11 @@ let getFlowers = () => {
 }
 
 let getQuizzes = () => {
-    return quizzes;
+    let quizList = [];
+    for (let i = 0; i < quizzes.length; i++) {
+        quizList.push(quizzes[i]);
+    }
+    return quizList;
 }
 
 let addCustomer = (name, email, password) => {

@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const api = require('./api');
+const { request } = require('http');
+const { stringify } = require('querystring');
 
 
 const application = express();
@@ -30,6 +32,15 @@ application.post('/register', (request, response) => {
     }
     else {
         response.json({message: 'The customer added.'});
+    }
+});
+
+application.post('/login', (request, response) => {
+    if (exists) {
+        response.send(JSON, stringify({"isvalid": true, "message": "customer already exists"}));
+    }
+    else {
+        response.send(JSON, stringify({"isvalid": false, "message": "customer does not exist"}));
     }
 });
 
