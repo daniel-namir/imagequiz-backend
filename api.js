@@ -1,6 +1,7 @@
 var { flowers } = require('./flowers.js');
 var { customers } = require('./customers.js');
 var { quizzes } = require('./data.js');
+const { scores } = require('./scores.js');
 
 let add = (n, m) => {
     return n + m;
@@ -45,6 +46,10 @@ let addCustomer = (name, email, password) => {
     return false;
 }
 
+let addScore = (quizTaker, quizID, score) => {
+    scores.push(quizTaker, quizID, score);
+}
+
 exports.add = add;
 exports.customers = customers;
 exports.getCustomers = getCustomers;
@@ -52,3 +57,4 @@ exports.addCustomer = addCustomer;
 exports.getFlowers = getFlowers;
 exports.getQuizzes = getQuizzes;
 exports.getQuiz = getQuiz;
+exports.addScore = addScore;
