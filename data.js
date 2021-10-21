@@ -27,7 +27,7 @@ let generateQuizzes = () => {
         if(questionIndex > (questions.length - 7)) {
             questionIndex = i - 5;
         }
-        let quiz = [
+        let quizQuestions = [
             questions[questionIndex], 
             questions[questionIndex+1], 
             questions[questionIndex+2], 
@@ -35,6 +35,7 @@ let generateQuizzes = () => {
             questions[questionIndex+4],
             questions[questionIndex+5]
         ];
+        let quiz = {id: i, name: questions[0].answer, questions: quizQuestions};
         quizzes.push(quiz);
     }
     return quizzes;

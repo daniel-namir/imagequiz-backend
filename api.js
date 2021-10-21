@@ -30,7 +30,7 @@ let getQuizzes = () => {
 let getQuiz = (id) => {
     for (let i = 0; i < quizzes.length; i++) {
         for (let j = 0; j < quizzes[i].length; j++) {
-            if (quizzes[i][j].answer == id) {
+            if (quizzes[i][j].name == id) {
                 return quizzes[i][j];
             }
         }
