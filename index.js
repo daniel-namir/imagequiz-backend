@@ -69,7 +69,11 @@ application.post('/score', (request, response) => {
     response.json({message: "Score has been updated."});
 });
 
-
-
+application.get('/scores/:quiztaker/:quizid', (request, response) => {
+    let quizTaker = request.body.quizTaker;
+    let quizId = request.body.quizId;
+    let quizScore = api.checkScore(quizTaker, quizId);
+    response.json(quizScore);
+});
 
 application.listen(port, () => console.log('Listening on port ' + port));

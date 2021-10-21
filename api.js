@@ -50,6 +50,14 @@ let addScore = (quizTaker, quizId, score) => {
     scores.push(quizTaker, quizId, score);
 }
 
+let checkScore = (quizTaker, quizId) => {
+    for (let i = 0; i < scores.length; i++) {
+        if (scores[i].quizTaker == quizTaker && scores[i].quizId == quizId) {
+            return scores[i].score;
+        }
+    }
+}
+
 exports.add = add;
 exports.customers = customers;
 exports.getCustomers = getCustomers;
@@ -58,3 +66,4 @@ exports.getFlowers = getFlowers;
 exports.getQuizzes = getQuizzes;
 exports.getQuiz = getQuiz;
 exports.addScore = addScore;
+exports.checkScore = checkScore;
