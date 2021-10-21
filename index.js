@@ -63,7 +63,7 @@ application.post('/score', (request, response) => {
     let quizTaker = request.body.quizTaker;
     let quizId = request.body.quizId;
     let score = request.body.score;
-    response.json(api.addScore(quizTaker, quizId, score));
+    response.json((api.addScore(quizTaker, quizId, score)), {message: "Score has been updated."});
 });
 
 application.get('/scores/:quiztaker/:quizid', (request, response) => {
