@@ -70,8 +70,8 @@ application.post('/score', (request, response) => {
 });
 
 application.get('/scores/:quiztaker/:quizid', (request, response) => {
-    let quizTaker = request.body.quizTaker;
-    let quizId = request.body.quizId;
+    let quizTaker = request.params.quiztaker;
+    let quizId = request.params.quizid;
     let quizScore = api.checkScore(quizTaker, quizId);
     response.json(quizScore);
 });
