@@ -70,7 +70,8 @@ application.post('/score', (request, response) => {
 application.get('/scores/:quiztaker/:quizid', (request, response) => {
     let quizTaker = request.params.quiztaker;
     let quizId = request.params.quizid;
-    response.json(api.checkScore(quizTaker, quizId));
+    let quizScore = api.checkScore(quizTaker, quizId);
+    response.send(JSON. stringify(quizScore));
 });
 
 application.listen(port, () => console.log('Listening on port ' + port));
