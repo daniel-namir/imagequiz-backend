@@ -1,8 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const api = require('./api');
-const { request } = require('http');
-const { stringify } = require('querystring');
 
 
 const application = express();
