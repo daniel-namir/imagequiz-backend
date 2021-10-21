@@ -35,7 +35,7 @@ let generateQuizzes = () => {
             questions[questionIndex+4],
             questions[questionIndex+5]
         ];
-        let quiz = {id: "1", name: questions[0].answer, questions: quizQuestions};
+        let quiz = {id: i, name: questions[0].answer, questions: quizQuestions};
         quizzes.push(quiz);
     }
     return quizzes;
