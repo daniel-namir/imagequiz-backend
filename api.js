@@ -1,11 +1,11 @@
-const { default: flowers } = require('./flowers.js');
+const { flowers } = require('./flowers.js');
 var { customers } = require('./users.js');
 
 let add = (n, m) => {
     return n + m;
 }
 
-let getCustomers = () => {
+let getCustomers = (customers) => {
     return customers;
 }
 

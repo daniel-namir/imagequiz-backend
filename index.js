@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const api = require('./api');
 
 
@@ -6,6 +7,7 @@ const application = express();
 const port = process.env.PORT || 4003;
 
 application.use(express.json());
+application.use(cors());
 
 application.get('/add/:n/:m', (request, response) => {
     let n = Number(request.params.n);
