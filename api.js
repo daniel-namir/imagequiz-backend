@@ -1,5 +1,6 @@
-const { flowers } = require('./flowers.js');
+var { flowers } = require('./flowers.js');
 var { customers } = require('./customers.js');
+var { quizzes } = require('./data.js');
 
 let add = (n, m) => {
     return n + m;
@@ -17,6 +18,10 @@ let getFlowers = () => {
     return flowersList;
 }
 
+let getQuizzes = () => {
+    return quizzes;
+}
+
 let addCustomer = (name, email, password) => {
     let alreadyExist = customers.find(x => x.email.toLowerCase() === email.toLowerCase());
     if (alreadyExist) {
@@ -31,3 +36,4 @@ exports.customers = customers;
 exports.getCustomers = getCustomers;
 exports.addCustomer = addCustomer;
 exports.getFlowers = getFlowers;
+exports.getQuizzes = getQuizzes;

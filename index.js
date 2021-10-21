@@ -37,6 +37,10 @@ application.get('/flowers', (request, response) => {
     response.json(api.getFlowers());
 });
 
+application.get('/quizzes', (request, response) => {
+    response.json(api.getQuizzes());
+});
+
 
 
 

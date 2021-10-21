@@ -1,4 +1,4 @@
-import flowers from './flowers';
+var { flowers } = require('./flowers.js');
 
 let generateQuestions = () => {
     let questions = [];
@@ -43,4 +43,4 @@ let generateQuizzes = () => {
 let quizzes = generateQuizzes();
 
 
-export default quizzes;
+exports.quizzes = quizzes;
