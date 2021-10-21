@@ -62,9 +62,9 @@ application.get('/quiz/:id', (request, response) => {
 });
 
 application.post('/score', (request, response) => {
-    let quizTaker = request.params.quizTaker;
-    let quizId = request.params.quizId;
-    let score = request.params.score;
+    let quizTaker = request.body.quizTaker;
+    let quizId = request.body.quizId;
+    let score = request.body.score;
     api.addScore(quizTaker, quizId, score);
     response.json({message: "Score has been updated."});
 });
