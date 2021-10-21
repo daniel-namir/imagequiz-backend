@@ -63,11 +63,13 @@ application.get('/quiz/:id', (request, response) => {
 
 application.post('/score', (request, response) => {
     let quizTaker = request.params.quizTaker;
-    let quizID = request.params.quizID;
+    let quizId = request.params.quizId;
     let score = request.params.score;
-    api.addScore(quizTaker, quizID, score);
+    api.addScore(quizTaker, quizId, score);
     response.json({message: "Score has been updated."});
-})
+});
+
+
 
 
 application.listen(port, () => console.log('Listening on port ' + port));
