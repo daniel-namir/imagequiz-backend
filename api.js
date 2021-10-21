@@ -47,7 +47,7 @@ let addCustomer = (name, email, password) => {
 }
 
 let addScore = (quizTaker, quizId, score) => {
-    scores.push(quizTaker, quizId, score);
+    scores.push({quizTaker, quizId, score});
 }
 
 let checkScore = (quizTaker, quizId) => {
