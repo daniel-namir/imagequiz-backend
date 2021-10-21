@@ -36,6 +36,10 @@ application.post('/register', (request, response) => {
 });
 
 application.post('/login', (request, response) => {
+    let name = request.body.name;
+    let email = request.body.email;
+    let password = request.body.password;
+    let exists = api.addCustomer(name, email, password);
     if (exists) {
         response.send(JSON, stringify({"isvalid": true, "message": "customer already exists"}));
     }
