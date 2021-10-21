@@ -56,6 +56,7 @@ let checkScore = (quizTaker, quizId) => {
             return scores[i].score;
         }
     }
+    return "0";
 }
 
 exports.add = add;
