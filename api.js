@@ -26,6 +26,16 @@ let getQuizzes = () => {
     return quizList;
 }
 
+let getQuiz = (id) => {
+    for (let i = 0; i < quizzes.length; i++) {
+        for (let j = 0; j < quizzes[i].length; j++) {
+            if (quizzes[i][j] == id) {
+                return quizzes[i][j];
+            }
+        }
+    }
+}
+
 let addCustomer = (name, email, password) => {
     let alreadyExist = customers.find(x => x.email.toLowerCase() === email.toLowerCase());
     if (alreadyExist) {
@@ -41,3 +51,4 @@ exports.getCustomers = getCustomers;
 exports.addCustomer = addCustomer;
 exports.getFlowers = getFlowers;
 exports.getQuizzes = getQuizzes;
+exports.getQuiz = getQuiz;

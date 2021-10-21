@@ -56,7 +56,10 @@ application.get('/quizzes', (request, response) => {
     response.json(api.getQuizzes());
 });
 
-
+application.get('/quiz/:id', (request, response) => {
+    let quiz = api.getQuiz(request.params.id);
+    response.json(quiz);
+})
 
 
 application.listen(port, () => console.log('Listening on port ' + port));
