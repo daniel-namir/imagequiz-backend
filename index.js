@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const api = require('./api');
+const { request } = require('express');
 
 
 const application = express();
@@ -17,20 +18,26 @@ application.get('/add/:n/:m', (request, response) => {
 });
 
 application.get('/customers', (request, response) => {
-    response.json(api.getCustomers());
+    api.getCustomers()
+    .then(x => {
+        response.json(x);
+    })
+    .catch(e => {
+        console.log(e);
+        response.status(500).json({message: 'Something went wrong.'});
+    })
 });
 
 application.post('/register', (request, response) => {
     let name = request.body.name;
     let email = request.body.email;
     let password = request.body.password;
-    let exists = api.addCustomer(name, email, password);
-    if (exists) {
-        response.status(403).json({message: "A customer with the same email already exists."});
-    }
-    else {
-        response.json({message: 'The customer added.'});
-    }
+    api.addCustomer(name, email, password)
+    .then(x => response.json({message: 'The customer added.'}))
+    .catch(e => {
+        console.log(e);
+        response.status(403).json({message: 'A customer with the same email already exists.'});
+    });
 });
 
 application.post('/login', (request, response) => {
@@ -46,6 +53,50 @@ application.post('/login', (request, response) => {
     }
 });
 
+application.post('/category', (request, response) => {
+    let name = request.body.name;
+    api.addCategory(name)
+    .then(x => response.json({message: 'The cateogry added.'}))
+    .catch(e => {
+        console.log(e);
+        response.status(403).json({message: 'ERROR'});
+    });
+});
+
+application.post('/question', (request, response) => {
+    let picture = request.body.picture;
+    let choices = request.body.choices;
+    let answer = request.body.answer;
+    api.addQuestion(picture, choices, answer)
+    .then(x => response.json({message: 'The question added.'}))
+    .catch(e => {
+        console.log(e);
+        response.status(403).json({message: 'ERROR'});
+    });
+});
+
+application.post('/quiz', (request, response) => {
+    let name = request.body.name;
+    let category_id = request.body.category_id;
+    api.addQuiz(name, category_id)
+    .then(x => response.json({message: 'The quiz added.'}))
+    .catch(e => {
+        console.log(e);
+        response.status(403).json({message: 'ERROR'});
+    });
+});
+
+application.post('/quiz/:quiz_id/:question_id', (request, response) => {
+    let quiz_id = request.params.quiz_id;
+    let question_id = request.params.question_id;
+    api.addQuestionToQuiz(quiz_id, question_id)
+    .then(x => response.json({message: 'The question added to the quiz.'}))
+    .catch(e => {
+        console.log(e);
+        response.status(403).json({message: 'ERROR'});
+    });
+});
+
 application.get('/flowers', (request, response) => {
     response.json(api.getFlowers());
 });
@@ -55,8 +106,14 @@ application.get('/quizzes', (request, response) => {
 });
 
 application.get('/quiz/:id', (request, response) => {
-    let quiz = api.getQuiz(request.params.id);
-    response.json(quiz);
+    api.getQuiz(request.params.id)
+    .then(x => {
+        response.json(x);
+    })
+    .catch(e => {
+        console.log(e);
+        response.status(500).json({message: 'Could not get quiz'});
+    })
 });
 
 application.post('/score', (request, response) => {
