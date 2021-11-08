@@ -2,12 +2,15 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const { quizzes } = require('./data');
 let create_db_structure_sql = fs.readFileSync('db.sql').toString();
-const connectionString =
-    `this should be your connection string.`;
+
+const connectionString = 
+`postgres://${process.env.USERNAME}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
+
 const connection = {
-    connectionString: connectionString,
+    connectionString: process.env.DATABASE_URL ? process.env.DATABASE_URL : connectionString,
     ssl: { rejectUnauthorized: false }
-}
+};
+
 const pool = new Pool(connection);
 let getInsertQuizzesSql = (categoryId) => {
     let sql = '';
