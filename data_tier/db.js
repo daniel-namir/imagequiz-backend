@@ -8,7 +8,7 @@ const connectionString =
 `postgres://${process.env.USERNAME}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
 
 const connection = {
-    connectionString: connectionString,
+    connectionString: process.env.DATABASE_URL ? process.env.DATABASE_URL : connectionString,
     ssl: { rejectUnauthorized: false }
 }
 
