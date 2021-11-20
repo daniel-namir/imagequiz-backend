@@ -9,19 +9,11 @@ let add = (n, m) => {
 }
 
 let getFlowers = () => {
-    let flowersList = [];
-    for (let i = 0; i < flowers.length; i++) {
-        flowersList.push(flowers[i]);
-    }
-    return flowersList;
+    return db.getFlowers();
 }
 
 let getQuizzes = () => {
-    let quizList = [];
-    for (let i = 0; i < quizzes.length; i++) {
-        quizList.push(quizzes[i]);
-    }
-    return quizList;
+    return db.getQuizzes();
 }
 
 let getQuiz = (id) => {
