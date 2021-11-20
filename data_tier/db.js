@@ -46,6 +46,24 @@ let addQuestionToQuiz = (quiz_id, question_id) => {
     return pool.query('insert into imagequiz.quiz_question(quiz_id, question_id) values ($1, $2)', [quiz_id, question_id]);
 }
 
+let addScore = (quizTaker, quizId, score) => {
+    return pool.query(`select * from imagequiz.customer where email = $1`, [quizTaker.toLowerCase()])
+    .then(x => {
+        pool.query(`insert into imagequiz.score(customer_id, quiz_id, score) values ($1, $2, $3)`, [x.rows[0].id, quizId, score])
+        .then(x => x.rows);
+    });
+}
+
+let checkScore = (quizTaker, quizId) => {
+    return pool.query(`select * from imagequiz.customer where email = $1`, [quizTaker.toLowerCase()])
+    .then(x => {
+        return pool.query(`select * from imagequiz.score where (customer_id = $1 and quiz_id = $2)`, [x.rows[0].id, quizId])
+        .then(x => {
+            return x.rows
+        });
+    });
+}
+
 exports.getCustomers = getCustomers;
 exports.addCustomer = addCustomer;
 exports.addQuestion = addQuestion;
@@ -53,3 +71,5 @@ exports.addCategory = addCategory;
 exports.addQuiz = addQuiz;
 exports.getQuiz = getQuiz;
 exports.addQuestionToQuiz = addQuestionToQuiz;
+exports.addScore = addScore;
+exports.checkScore = checkScore;

@@ -41,3 +41,12 @@ create table imagequiz.quiz_question
     quiz_id int not null references imagequiz.quiz(id),
     question_id int not null references imagequiz.question(id)
 );
+
+create table imagequiz.score
+(
+    id bigserial primary key,
+    customer_id int not null references imagequiz.customer(id),
+    quiz_id int not null references imagequiz.quiz(id),
+    score int not null,
+    date timestamp not null default now()
+);

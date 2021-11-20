@@ -53,16 +53,11 @@ let addQuestionToQuiz = (quiz_id, question_id) => {
 }
 
 let addScore = (quizTaker, quizId, score) => {
-    scores.push({quizTaker, quizId, score});
+    return db.addScore(quizTaker, quizId, score);
 }
 
 let checkScore = (quizTaker, quizId) => {
-    for (let i = 0; i < scores.length; i++) {
-        if (scores[i].quizTaker == quizTaker && scores[i].quizId == quizId) {
-            return scores[i].score;
-        }
-    }
-    return "0";
+    return db.checkScore(quizTaker, quizId);
 }
 
 exports.add = add;
