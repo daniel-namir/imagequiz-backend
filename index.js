@@ -47,16 +47,15 @@ application.post('/register', (request, response) => {
 });
 
 application.post('/login', (request, response) => {
-    let name = request.body.name;
     let email = request.body.email;
     let password = request.body.password;
-    let exists = api.addCustomer(name, email, password);
-    if (exists) {
-        response.json({"isvalid": true, message: "customer already exists"});
-    }
-    else {
-        response.json({"isvalid": false, message: "customer does not exist"});
-    }
+    api.addCustomer(email, password)
+    .then(x => {
+        response.json({isvalid: "true", message: "The customer exist"});
+    })
+    .catch(e => {
+        response.json({ isvalid:"false", message:"The customer does not exist"});
+    })
 });
 
 application.post('/category', (request, response) => {
@@ -104,11 +103,17 @@ application.post('/quiz/:quiz_id/:question_id', (request, response) => {
 });
 
 application.get('/flowers', (request, response) => {
-    response.json(api.getFlowers());
+    api.getFlowers()
+    .then(x => {
+        response.json(x);
+    });
 });
 
 application.get('/quizzes', (request, response) => {
-    response.json(api.getQuizzes());
+    api.getQuizzes()
+    .then(x => {
+        response.json(x);
+    });
 });
 
 application.get('/quiz/:id', (request, response) => {
