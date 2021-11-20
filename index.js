@@ -10,6 +10,12 @@ const port = process.env.PORT || 4002;
 application.use(express.json());
 application.use(cors());
 
+application.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+})
+
 application.get('/add/:n/:m', (request, response) => {
     let n = Number(request.params.n);
     let m = Number(request.params.m);
