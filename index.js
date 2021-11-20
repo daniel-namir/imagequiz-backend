@@ -120,15 +120,27 @@ application.post('/score', (request, response) => {
     let quizTaker = request.body.quizTaker;
     let quizId = request.body.quizId;
     let score = request.body.score;
-    api.addScore(quizTaker, quizId, score);
-    response.send(JSON. stringify({message: "Score has been updated."}));
+    api.addScore(quizTaker, quizId, score)
+    .then(x => {
+        response.json({message: 'Score has been updated.'});
+    })
+    .catch(e => {
+        console.log(e);
+        response.status(e).json({message: 'ERROR'});
+    });
 });
 
 application.get('/scores/:quiztaker/:quizid', (request, response) => {
     let quizTaker = request.body.quiztaker;
     let quizId = request.body.quizid;
-    let quizScore = api.checkScore(quizTaker, quizId);
-    response.send(JSON. stringify(quizScore));
+    api.checkScore(quizTaker, quizId)
+    .then(x => {
+        response.json(x);
+    })
+    .catch(e => {
+        console.log(e);
+        response.status(e).json({message: 'ERROR'});
+    });
 });
 
 application.listen(port, () => console.log('Listening on port ' + port));
