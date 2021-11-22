@@ -52,8 +52,12 @@ let getQuiz = (quiz_id) => {
 }
 
 let getQuizzes = () => {
-    console.log('in db.getQuizzes');
     return pool.query('select * from imagequiz.quiz')
+    .then(x => x.rows);
+}
+
+let getFlowers = () => {
+    return pool.query('select * from imagequiz.flower')
     .then(x => x.rows);
 }
 
@@ -87,6 +91,7 @@ exports.addCategory = addCategory;
 exports.addQuiz = addQuiz;
 exports.getQuiz = getQuiz;
 exports.getQuizzes = getQuizzes;
+exports.getFlowers = getFlowers;
 exports.addQuestionToQuiz = addQuestionToQuiz;
 exports.addScore = addScore;
 exports.checkScore = checkScore;

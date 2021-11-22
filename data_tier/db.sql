@@ -1,10 +1,12 @@
 create schema if not exists imagequiz;
 
-drop table if exists imagequiz.customer;
-drop table if exists imagequiz.question;
-drop table if exists imagequiz.category;
-drop table if exists imagequiz.quiz;
+drop table if exists imagequiz.flower;
+drop table if exists imagequiz.score;
 drop table if exists imagequiz.quiz_question;
+drop table if exists imagequiz.quiz;
+drop table if exists imagequiz.category;
+drop table if exists imagequiz.question;
+drop table if exists imagequiz.customer;
 
 
 create table imagequiz.customer
@@ -13,6 +15,13 @@ create table imagequiz.customer
     name text not null,
     email text not null unique,
     password text not null
+);
+
+create table imagequiz.flower
+(
+    id bigserial primary key,
+    name text not null,
+    picture text not null
 );
 
 create table imagequiz.question
