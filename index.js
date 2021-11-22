@@ -145,8 +145,8 @@ application.post('/score', (request, response) => {
 });
 
 application.get('/scores/:quiztaker/:quizid', (request, response) => {
-    let quizTaker = request.body.quiztaker;
-    let quizId = request.body.quizid;
+    let quizTaker = request.params.quiztaker;
+    let quizId = request.params.quizid;
     api.checkScore(quizTaker, quizId)
     .then(x => {
         response.json(x);
