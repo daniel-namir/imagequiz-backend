@@ -1,7 +1,3 @@
-var { flowers } = require('./flowers.js');
-var { customers } = require('./data_tier/customers.js');
-var { quizzes } = require('./data.js');
-const { scores } = require('./scores.js');
 const db = require('./data_tier/db.js');
 
 let add = (n, m) => {
@@ -22,6 +18,10 @@ let getQuiz = (id) => {
 
 let addCustomer = (name, email, password) => {
     return db.addCustomer(name, email, password);
+}
+
+let login = (email, password) => {
+    return db.login(email, password);
 }
 
 let getCustomers = () => {
@@ -53,13 +53,14 @@ let checkScore = (quizTaker, quizId) => {
 }
 
 exports.add = add;
-exports.customers = customers;
 exports.getCustomers = getCustomers;
 exports.addCustomer = addCustomer;
+exports.login = login;
 exports.getFlowers = getFlowers;
 exports.getQuizzes = getQuizzes;
 exports.addCategory = addCategory;
 exports.getQuiz = getQuiz;
+exports.getQuizzes = getQuizzes;
 exports.addQuiz = addQuiz;
 exports.addQuestion = addQuestion;
 exports.addQuestionToQuiz = addQuestionToQuiz;

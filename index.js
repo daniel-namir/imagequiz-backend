@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const api = require('./api');
-const { request } = require('express');
 
 
 const application = express();
@@ -43,12 +42,17 @@ application.post('/register', (request, response) => {
 application.post('/login', (request, response) => {
     let email = request.body.email;
     let password = request.body.password;
-    api.addCustomer(email, password)
+    api.login(email, password)
     .then(x => {
-        response.json({isvalid: "true", message: "The customer exist"});
+        if (x) {
+            response.json({isvalid: "true", message: "Login was successful"});
+        }
+        else {
+            response.json({isvalid: "false", message: "The credentials are not valid"});
+        }
     })
     .catch(e => {
-        response.json({ isvalid:"false", message:"The customer does not exist"});
+        response.status(500).json({ isvalid:"false", message:"The was an error logging in"});
     })
 });
 
@@ -104,10 +108,15 @@ application.get('/flowers', (request, response) => {
 });
 
 application.get('/quizzes', (request, response) => {
+    console.log('in /quizzes');
     api.getQuizzes()
     .then(x => {
         response.json(x);
-    });
+    })
+    .catch(e => {
+        console.log(e);
+        response.status(500).json({message: 'Something went wrong.'});
+    })
 });
 
 application.get('/quiz/:id', (request, response) => {

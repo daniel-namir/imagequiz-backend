@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 require("dotenv").config();
 
 const connectionString = 
-`postgres://${process.env.USERNAME}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
+`postgres://${process.env.DATABASEUSERNAME}:${process.env.DATABASEPASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
 
 const connection = {
     connectionString: process.env.DATABASE_URL ? process.env.DATABASE_URL : connectionString,
@@ -25,6 +25,15 @@ let addCustomer = (name, email, password) => {
     return pool.query('insert into imagequiz.customer(name, email, password) values ($1, $2, $3)', [name, email.toLowerCase(), hashedPassword]);
 }
 
+let login = (email, password) => {
+    return pool.query('select password from imagequiz.customer where email = $1', [email.toLowerCase()])
+    .then(x => x.rows[0].password)
+    .then(x => {
+        let result = bcrypt.compareSync(password, x);
+        return result;
+    });
+}
+
 let addQuestion = (picture, choices, answer) => {
     return pool.query('insert into imagequiz.question(picture, choices, answer) values ($1, $2, $3)', [picture, choices, answer]);
 }
@@ -39,6 +48,12 @@ let addQuiz = (name, category_id) => {
 
 let getQuiz = (quiz_id) => {
     return pool.query(`select * from imagequiz.quiz where id = $1`, [quiz_id])
+    .then(x => x.rows);
+}
+
+let getQuizzes = () => {
+    console.log('in db.getQuizzes');
+    return pool.query('select * from imagequiz.quiz')
     .then(x => x.rows);
 }
 
@@ -64,12 +79,14 @@ let checkScore = (quizTaker, quizId) => {
     });
 }
 
+exports.login = login;
 exports.getCustomers = getCustomers;
 exports.addCustomer = addCustomer;
 exports.addQuestion = addQuestion;
 exports.addCategory = addCategory;
 exports.addQuiz = addQuiz;
 exports.getQuiz = getQuiz;
+exports.getQuizzes = getQuizzes;
 exports.addQuestionToQuiz = addQuestionToQuiz;
 exports.addScore = addScore;
 exports.checkScore = checkScore;
