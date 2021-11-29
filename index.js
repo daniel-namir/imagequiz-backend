@@ -1,19 +1,79 @@
 const express = require('express');
 const cors = require('cors');
+const { v4: uuid } = require('uuid');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const api = require('./api');
 
 
 const application = express();
 const port = process.env.PORT || 4002;
 
+passport.use(new LocalStrategy(
+    { usernameField: 'email'},
+    (email, password, done) => {
+        console.log('Inside local strategy callback');
+        api.login(email, password)
+            .then(x => {
+                console.log(x);
+                if (x.isValid) {
+                    let user = { id: x.id, name: x.name, email: email };
+                    console.log(user);
+                    return done(null, user);
+                } else {
+                    console.log('The email or password is not valid.');
+                    return done(null, false, 'The email or password was invalid');
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                return done(e);
+            });
+    }
+));
+
+passport.serializeUser((user, done) => {
+    console.log('Inside serializeUser callback. User id is dave to the session file store here')
+    done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+    console.log('Inside deserializeUser callback')
+    console.log(`The user id passport saved in the session file store is: ${id}`)
+    const user = {id: id};
+    done(null, user);
+});
+
 application.use(express.json());
 application.use(cors());
 
+application.use(session({
+    genid: (request) => {
+        //console.log(request);
+        console.log('Inside session middleware genud function');
+        console.log(`Request object sessionID from client: ${request.sessionID}`);
+
+        return uuid(); // use UUIDs for session IDs
+    },
+    store: new FileStore(),
+    secret: 'some random string',
+    resave: false,
+    saveUninitialized: true
+}));
+application.use(passport.initialize());
+application.use(passport.session());
+
 application.get('/add/:n/:m', (request, response) => {
-    let n = Number(request.params.n);
-    let m = Number(request.params.m);
-    let sum = api.add(n, m);
-    response.send(`${n} + ${m} = ${sum}.`);
+    if (request.isAuthenticated()) {
+        let n = Number(request.params.n);
+        let m = Number(request.params.m);
+        let sum = api.add(n, m);
+        response.send(`${n} + ${m} = ${sum}.`);
+    } else {
+        response.status(403).json({done: false, message: 'You need to log in first.'})
+    }
 });
 
 application.get('/customers', (request, response) => {
@@ -40,20 +100,18 @@ application.post('/register', (request, response) => {
 });
 
 application.post('/login', (request, response) => {
-    let email = request.body.email;
-    let password = request.body.password;
-    api.login(email, password)
-    .then(x => {
-        if (x) {
-            response.json({isvalid: "true", message: "Login was successful"});
-        }
-        else {
-            response.json({isvalid: "false", message: "The credentials are not valid"});
-        }
-    })
-    .catch(e => {
-        response.status(500).json({ isvalid:"false", message:"The was an error logging in"});
-    })
+    console.log('Inside POST /login callback');
+    passport.authenticate('locacl', (err, user, info) => {
+        console.log('Inside passport.authenticate() callback');
+        console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`);
+        console.log(`req.user: ${JSON.stringify(request.user)}`);
+        request.login(user, (err) => {
+            console.log('Inside req.login() callback');
+            console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`);
+            console.log(`req.user: ${JSON.stringify(request.user)}`);
+            return response.json({ done: true, message: 'The customer logged in.'});
+        })
+    })(request, response, next);
 });
 
 application.post('/category', (request, response) => {
