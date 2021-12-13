@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { v4: uuid } = require('uuid');
@@ -5,11 +6,10 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 const api = require('./api');
-
-
-const application = express();
-const port = process.env.PORT || 4002;
+const { request, response } = require('express');
+const frontEnd = 'http://localhost:3000';
 
 passport.use(new LocalStrategy(
     { usernameField: 'email'},
@@ -34,6 +34,19 @@ passport.use(new LocalStrategy(
     }
 ));
 
+passport.use(new TwitterStrategy({
+    consumerKey: process.env.TWITTER_CONSUMER_KEY,
+    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+    callbackURL: '/return/twitter',
+},
+    (token, tokenSecret, profile, done) => {
+        console.log('Inside passport twitter ...');
+        //console.log(profile._json.screen_name);
+        //console.log(profile);
+        let user = { id: profile.id, name: profile.displayName, username: profile.username };
+        return done(null, user);
+    }));
+
 passport.serializeUser((user, done) => {
     console.log('Inside serializeUser callback. User id is dave to the session file store here')
     done(null, user.id);
@@ -46,8 +59,15 @@ passport.deserializeUser((id, done) => {
     done(null, user);
 });
 
+const application = express();
+const port = process.env.PORT || 4002;
+
 application.use(express.json());
-application.use(cors());
+application.use(cors({
+    origin: 'http://localhost:3000', // allow to server to accept request from different origin
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+    credentials: true, // allow session cookie from browser to pass through
+}));
 
 application.use(session({
     genid: (request) => {
@@ -66,13 +86,19 @@ application.use(passport.initialize());
 application.use(passport.session());
 
 application.get('/add/:n/:m', (request, response) => {
+    console.log('in /add');
+    console.log(request.user);
+    console.log(request.sessionID);
     if (request.isAuthenticated()) {
+        console.log('Inside /add - inside isAuthenticated');
+        console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`);
+        console.log(`req.user: ${JSON.stringify(request.user)}`);
         let n = Number(request.params.n);
         let m = Number(request.params.m);
         let sum = api.add(n, m);
-        response.send(`${n} + ${m} = ${sum}.`);
+        response.json({done: true, sum: sum});
     } else {
-        response.status(403).json({done: false, message: 'You need to log in first.'})
+        response.status(401).json({done: false, message: 'You need to log in first.'})
     }
 });
 
@@ -101,7 +127,7 @@ application.post('/register', (request, response) => {
 
 application.post('/login', (request, response) => {
     console.log('Inside POST /login callback');
-    passport.authenticate('locacl', (err, user, info) => {
+    passport.authenticate('local', (err, user, info) => {
         console.log('Inside passport.authenticate() callback');
         console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`);
         console.log(`req.user: ${JSON.stringify(request.user)}`);
@@ -109,9 +135,35 @@ application.post('/login', (request, response) => {
             console.log('Inside req.login() callback');
             console.log(`req.session.passport: ${JSON.stringify(request.session.passport)}`);
             console.log(`req.user: ${JSON.stringify(request.user)}`);
+            console.log(`req.SessionID: ${request.sessionID}`);
             return response.json({ done: true, message: 'The customer logged in.'});
         })
     })(request, response, next);
+});
+
+application.get('/login/twitter', passport.authenticate('twitter'));
+
+aaplication.get('/return/twitter', (request, response, next) => {
+    console.log('Inside Get twitter /login callback');
+    passport.authenticate('twitter', (err, user, info) => {
+        console.log('Inside passport.authenticate() callback');
+
+        //console.log(request);
+        request.login(user, (err) => {
+            console.log('Inside req.login() callback');
+            console.log(`req.session.passport: ${JSON.stringify(request.session)}`);
+            console.log(`req.user: ${JSON.stringify(request.user)}`);
+            console.log(`Request object sessionID from client: ${request.sessionID}`);
+            //console.log(request.query);
+            //return response.json({ done: true, message: 'The customer logged in.' });
+            response.redirect(frontEnd + `/#/twitter/${request.user.username}/${request.user.name}`);
+        })
+    })(request, response, next);
+});
+
+application.get('/logout', (request, response, next) => {
+    request.logout();
+    response.json({ done: true, message: 'The customer logged out.' });
 });
 
 application.post('/category', (request, response) => {
